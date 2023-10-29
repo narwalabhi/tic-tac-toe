@@ -36,18 +36,6 @@ public class Game {
         this.numberOfSymbols = 0;
     }
 
-    public void setCurrentPlayer(Player currentPlayer) {
-        this.currentPlayer = currentPlayer;
-    }
-
-    public void setWinner(Player winner) {
-        this.winner = winner;
-    }
-
-    public void setGameStatus(GameStatus gameStatus) {
-        this.gameStatus = gameStatus;
-    }
-
     public Board getBoard() {
         return board;
     }
@@ -60,12 +48,24 @@ public class Game {
         return currentPlayer;
     }
 
+    public void setCurrentPlayer(Player currentPlayer) {
+        this.currentPlayer = currentPlayer;
+    }
+
     public Player getWinner() {
         return winner;
     }
 
+    public void setWinner(Player winner) {
+        this.winner = winner;
+    }
+
     public GameStatus getGameStatus() {
         return gameStatus;
+    }
+
+    public void setGameStatus(GameStatus gameStatus) {
+        this.gameStatus = gameStatus;
     }
 
     public List<Move> getMoves() {
@@ -80,40 +80,48 @@ public class Game {
         return numberOfSymbols;
     }
 
+    public void setNumberOfSymbols(int numberOfSymbols) {
+        this.numberOfSymbols = numberOfSymbols;
+    }
+
     public WinningStrategy getWinningStrategy() {
         return winningStrategy;
     }
 
-    public static class Builder{
+    public void setBoard(Board board) {
+        this.board = board;
+    }
+
+    public static class Builder {
 
         private int dimension;
         private List<Player> players;
         private WinningStrategy winningStrategy;
 
 
-        public Builder dimension(int dimension){
+        public Builder dimension(int dimension) {
             this.dimension = dimension;
             return this;
         }
 
-        public Builder players(List<Player> players){
+        public Builder players(List<Player> players) {
             this.players = players;
             return this;
         }
 
-        public Builder winningStrategy(WinningStrategy winningStrategy){
+        public Builder winningStrategy(WinningStrategy winningStrategy) {
             this.winningStrategy = winningStrategy;
             return this;
         }
 
         private void verifyDimension() throws InvalidBoardDimensionException {
-            if(dimension < 3 || dimension > 10){
+            if (dimension < 3 || dimension > 10) {
                 throw new InvalidBoardDimensionException("Dimension must be between 3 and 10");
             }
         }
 
         private void verifyPlayerCount() throws InvalidPlayerCountException {
-            if(players.size() != dimension-1){
+            if (players.size() != dimension - 1) {
                 throw new InvalidPlayerCountException("There must be at least 2 players");
             }
         }

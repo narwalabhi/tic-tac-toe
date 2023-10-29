@@ -1,40 +1,43 @@
 package models;
 
-import exception.EmptyNameException;
-import exception.InvalidSymbolException;
-import exception.InvalidTypeException;
+import exception.*;
+import models.enums.CellStatus;
 import models.enums.PlayerType;
+import service.makeMoveStrategy.MakeMoveStrategy;
 
+import java.util.Scanner;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
 public class Player {
 
-    private static int idCounter = 0;
     private static final Lock lock = new ReentrantLock();
-
+    private static int idCounter = 0;
     private final int id;
     private String name;
     private char symbol;
     private PlayerType type;
 
-    private Player(){
-        this.id = getNewId();
+    private MakeMoveStrategy makeMoveStrategy;
+
+    private Player(String name, char symbol, PlayerType type, MakeMoveStrategy makeMoveStrategy) {
+        this(name, symbol, type);
+        this.makeMoveStrategy = makeMoveStrategy;
     }
 
-    private static int getNewId(){
+    private Player(String name, char symbol, PlayerType type) {
+        this.id = getNewId();
+        this.name = name;
+        this.symbol = symbol;
+        this.type = type;
+    }
+
+    private static int getNewId() {
         int newId;
         lock.lock();
         newId = ++idCounter;
         lock.unlock();
         return newId;
-    }
-
-    public Player(String name, char symbol, PlayerType type) {
-        this.id = getNewId();
-        this.name = name;
-        this.symbol = symbol;
-        this.type = type;
     }
 
     public int getId() {
@@ -53,24 +56,34 @@ public class Player {
         return type;
     }
 
-    public static class Builder{
+    public Move makeMove(Board board) throws GameOverException {
+        return makeMoveStrategy.makeMove(board, this);
+    }
+
+    public static class Builder {
 
         private String name;
         private char symbol;
         private PlayerType type;
+        private MakeMoveStrategy makeMoveStrategy;
 
-        public Builder name(String name){
+        public Builder name(String name) {
             this.name = name;
             return this;
         }
 
-        public Builder symbol(char symbol){
+        public Builder symbol(char symbol) {
             this.symbol = symbol;
             return this;
         }
 
-        public Builder type(PlayerType type){
+        public Builder type(PlayerType type) {
             this.type = type;
+            return this;
+        }
+
+        public Builder makeMoveStrategy(MakeMoveStrategy makeMoveStrategy) {
+            this.makeMoveStrategy = makeMoveStrategy;
             return this;
         }
 
@@ -85,20 +98,27 @@ public class Player {
         }
 
         private void validateType() throws InvalidTypeException {
-            if (type == null){
+            if (type == null) {
                 throw new InvalidTypeException("Type cannot be null");
             }
         }
 
-        public void validate() throws InvalidSymbolException, EmptyNameException, InvalidTypeException {
+        public void validateMakeMoveStrategy() throws InvalidMakeMoveStrategy {
+            if (makeMoveStrategy == null) {
+                throw new InvalidMakeMoveStrategy("MakeMoveStrategy cannot be null");
+            }
+        }
+
+        public void validate() throws InvalidSymbolException, EmptyNameException, InvalidTypeException, InvalidMakeMoveStrategy {
             validateName();
             validateSymbol();
             validateType();
+            validateMakeMoveStrategy();
         }
 
-        public Player build() throws EmptyNameException, InvalidSymbolException, InvalidTypeException {
+        public Player build() throws EmptyNameException, InvalidSymbolException, InvalidTypeException, InvalidMakeMoveStrategy {
             validate();
-            return new Player(name, symbol, type);
+            return new Player(name, symbol, type, makeMoveStrategy);
         }
 
     }

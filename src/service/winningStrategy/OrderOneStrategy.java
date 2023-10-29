@@ -33,6 +33,23 @@ public class OrderOneStrategy implements WinningStrategy {
 
     @Override
     public Player checkWinner(Board board, Move lastMove) {
+        Player player = lastMove.getPlayer();
+        char playerSymbol = player.getSymbol();
+        int row = lastMove.getCell().getRow();
+        int column = lastMove.getCell().getColumn();
+
+        if (checkRowWin(row, playerSymbol)) {
+            return player;
+        } else if (checkColumnWin(column, playerSymbol)) {
+            return player;
+        } else if (isTopLeftDiagonal(row, column) && checkTopLeftDiagonalWin(playerSymbol)) {
+            return player;
+        } else if (isTopRightDiagonal(row, column) && checkTopRightDiagonalWin(playerSymbol)) {
+            return player;
+        } else if (checkCornerWin(playerSymbol)) {
+            return player;
+        }
+
         return null;
     }
 
@@ -40,7 +57,7 @@ public class OrderOneStrategy implements WinningStrategy {
         return row == col;
     }
 
-    private boolean isTopRightDiagonal(int row, int col){
+    private boolean isTopRightDiagonal(int row, int col) {
         return row + col == dimension - 1;
     }
 

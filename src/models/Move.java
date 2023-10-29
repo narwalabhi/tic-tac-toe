@@ -18,4 +18,16 @@ public class Move {
         this.cell = new Cell(row, col);
     }
 
+    public Move(int row, int column, Cell cell) {
+        this.cell = cell;
+        this.player = cell.getPlayer();
+    }
+
+    public Player getPlayer() {
+        return player;
+    }
+
+    public Cell getCell() {
+        return cell;
+    }
 }

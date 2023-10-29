@@ -1,4 +1,4 @@
-package service.botPlayingStrategy;
+package service.makeMoveStrategy;
 
 import exception.GameOverException;
 import models.Board;
@@ -6,10 +6,11 @@ import models.Cell;
 import models.Move;
 import models.Player;
 import models.enums.CellStatus;
+import service.makeMoveStrategy.MakeMoveStrategy;
 
 import java.util.List;
 
-public class RandomBotPlayingStrategy implements BotPlayingStrategy {
+public class RandomBotPlayingStrategy implements MakeMoveStrategy {
 
     @Override
     public Move makeMove(Board board, Player player) throws GameOverException {

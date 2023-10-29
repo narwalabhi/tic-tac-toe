@@ -15,6 +15,14 @@ public class Cell {
         this.cellStatus = CellStatus.EMPTY;
     }
 
+    public void display(){
+        if(player == null){
+            System.out.print("| |");
+        }else{
+            System.out.print("|" + player.getSymbol() + "|");
+        }
+    }
+
     public CellStatus getCellStatus() {
         return cellStatus;
     }
@@ -25,5 +33,17 @@ public class Cell {
 
     public void setCellStatus(CellStatus cellStatus) {
         this.cellStatus = cellStatus;
+    }
+
+    public int getRow() {
+        return row;
+    }
+
+    public int getColumn() {
+        return column;
+    }
+
+    public Player getPlayer() {
+        return player;
     }
 }
